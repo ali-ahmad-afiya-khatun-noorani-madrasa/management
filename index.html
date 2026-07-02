@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head> 
@@ -6,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>মাদ্রাসা ম্যানেজমেন্ট সিস্টেম</title>
 
-    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1ZgIsgAfGHmoJuK86BmxUQBIz51vAlFxE" />
+    <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1R1Ps51EBCs_NQDn7YsmXFDHuHnK5S5mS=w1000" />
     <link href="https://fonts.googleapis.com/css2?family=SolaimanLipi&display=swap" rel="stylesheet" />
     
     <style>
@@ -26,7 +25,6 @@
         .login-btn { width: 100%; padding: 14px; background: #0284c7; border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 10px; }
         .login-btn:hover { background: #0369a1; }
         
-        /* 🎯 মেইন ড্যাশবোর্ড উইন্ডো (গুগল স্ক্রিপ্ট লোড করার জন্য) */
         .main-container { width: 100%; height: 100%; overflow: hidden; display: none; position: relative; }
         iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background-color: #0f172a; }
     </style>
@@ -35,7 +33,7 @@
 
     <div class="login-overlay" id="loginOverlay">
         <div class="login-card" id="loginCardContainer">
-            <img src="https://lh3.googleusercontent.com/d/1ZgIsgAfGHmoJuK86BmxUQBIz51vAlFxE" alt="Madrasa Logo" class="madrasa-logo" />
+            <img src="https://lh3.googleusercontent.com/d/1R1Ps51EBCs_NQDn7YsmXFDHuHnK5S5mS=w1000" alt="Madrasa Logo" class="madrasa-logo" />
             <h2>লাইসেন্স ভেরিফিকেশন</h2>
             <p>সফটওয়্যারটি ব্যবহার করতে অনুগ্রহ করে ইউজারনেম এবং পাসওয়ার্ড দিন</p>
             
@@ -43,7 +41,7 @@
             
             <div class="input-group">
                 <label for="username">ইউজারনেম / ফোন নম্বর</label>
-                <input type="text" id="username" placeholder="যেমন:aliahmad" required />
+                <input type="text" id="username" placeholder="যেমন: aliahmad" required />
             </div>
             
             <div class="input-group">
@@ -51,7 +49,7 @@
                 <input type="password" id="licenseKey" placeholder="যেমন: aliahmad@94" required />
             </div>
             
-            <button class="login-btn" id="loginBtn" onclick="performSecureLogin()">🔑 যাচাই ও সক্রিয় করুন</button>
+            <button class="login-btn" id="loginBtn" onclick="performSecureLogin()">🔑 যাচাই ও সক্রিয় করুন</button>
         </div>
     </div>
 
@@ -60,10 +58,9 @@
     </div>
 
     <script>
-        // 🎯 আপনার গুগল অ্যাপস স্ক্রিপ্টের এপিআই ইউআরএল
-        var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbzxr7LgCxKLZ1NnbEPKYjc04r_hBmLQ6XfrUq-2wZjaT5hBmNMHtjjcto7I5aQSISCL6g/exec";
+        // 🎯 আপনার নতুন গুগল অ্যাপস স্ক্রিপ্টের ডেপ্লয়মেন্ট ইউআরএল (URL) নিচে বসাবেন
+        var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbw_Ub2HvJIfN9y972NucCzAmwiT2NpypKT6RbCEZvwUsN_W_xqtw2TRZrtYldQxP4cfZw/exec";
 
-        // ডিরেক্ট গুগল থেকে লিংক ঘুরিয়ে নিয়ে আসলে লক স্ক্রিন দেখানোর মেকানিজম
         window.addEventListener('DOMContentLoaded', function() {
             var urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('status') === 'denied') {
@@ -74,7 +71,7 @@
                         🚨 সরাসরি লিংকে প্রবেশ করা সম্পূর্ণ নিষিদ্ধ।
                     </div>
                     <p style="color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
-                        নিরাপত্তাজনিত কারণে এই ক্লাউড সার্ভার ইউআরএলটি লক করা হয়েছে। সফটওয়্যারটি ব্যবহার করতে অনুগ্রহ করে মূল গিটহাব পোর্টাল ব্যবহার করুন।
+                        নিরাপত্তাজনিত কারণে এই ক্লাউড সার্ভার ইউআরএলটি লক করা হয়েছে। সফটওয়্যারটি ব্যবহার করতে অনুগ্রহ করে মূল গিটহাব পোর্টাল ব্যবহার করুন।
                     </p>
                     <button class="login-btn" onclick="window.location.href=window.location.pathname" style="background: #0284c7; width: 100%; padding: 14px; border-radius: 8px; color: white; font-weight: bold; border: none; cursor: pointer;">
                         🔄 মূল লগইন পেজে ফিরুন
@@ -89,7 +86,6 @@
             errBlock.style.display = 'block';
         }
 
-        // 🚀 এপিআই বেইজড ১০০% সিকিউর লগইন ফাংশন (ব্যানার ছাড়া)
         function performSecureLogin() {
             var userField = document.getElementById('username').value.trim();
             var keyField  = document.getElementById('licenseKey').value.trim();
@@ -105,7 +101,6 @@
             btn.innerText = "সার্ভার যাচাই করা হচ্ছে...";
             btn.disabled = true;
 
-            // ব্যাকগ্রাউন্ডে গুগল শিটের ডেটা চেক করার রিকোয়েস্ট ইউআরএল
             var requestUrl = GOOGLE_SCRIPT_API + "?user=" + encodeURIComponent(userField) + "&key=" + encodeURIComponent(keyField);
 
             fetch(requestUrl)
@@ -114,26 +109,24 @@
                     if (data && data.success) {
                         btn.innerText = "🎉 লগইন সফল! ড্যাশবোর্ড ওপেন হচ্ছে...";
                         
-                        // সাকসেস হলে আইফ্রেমের টপ মার্জিন ০ রেখে ফ্রেশ ড্যাশবোর্ড রেন্ডার হবে
-                        document.getElementById('appIframe').src = requestUrl + "&loadApp=true"; 
+                        // সাকসেস হলে মূল ড্যাশবোর্ড লোড করার প্যারামিটার পাঠানো হচ্ছে
+                        document.getElementById('appIframe').src = GOOGLE_SCRIPT_API + "?loadApp=true"; 
                         document.getElementById('loginOverlay').style.display = 'none';
                         document.getElementById('mainAppContainer').style.display = 'block';
                     } else {
                         showMsg("❌ " + (data.error ? data.error : "ভুল ইউজার আইডি অথবা পাসওয়ার্ড!"));
-                        btn.innerText = "🔑 যাচাই ও সক্রিয় করুন";
+                        btn.innerText = "🔑 যাচাই ও সক্রিয় করুন";
                         btn.disabled = false;
                     }
                 })
                 .catch(err => {
-                    // কোনো এরর বা ফালব্যাক হলে সরাসরি লোড করার প্রিপারেশন
-                    console.log("CORS/Bypass system triggered...");
-                    document.getElementById('appIframe').src = requestUrl + "&loadApp=true";
-                    document.getElementById('loginOverlay').style.display = 'none';
-                    document.getElementById('mainAppContainer').style.display = 'block';
+                    console.log("Error logic triggered...");
+                    showMsg("❌ সার্ভার সংযোগে সমস্যা হয়েছে! আবার চেষ্টা করুন।");
+                    btn.innerText = "🔑 যাচাই ও সক্রিয় করুন";
+                    btn.disabled = false;
                 });
         }
 
-        // এন্টার চাপলে লগইন ট্রিগার করার জন্য ইভেন্ট লিসেনার
         document.getElementById('licenseKey').addEventListener('keypress', function(e) { if (e.key === 'Enter') { performSecureLogin(); } });
         document.getElementById('username').addEventListener('keypress', function(e) { if (e.key === 'Enter') { performSecureLogin(); } });
     </script>
