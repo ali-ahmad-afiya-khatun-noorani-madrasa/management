@@ -10,9 +10,8 @@
     
     <style>
         * { box-sizing: border-box; font-family: 'SolaimanLipi', sans-serif; }
-        html, body { margin: 0; padding: 0; height: 100vh; width: 100vw; background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
+        html, body { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; background-color: #0f172a; color: #f8fafc; }
         
-        /* 🔒 লগইন স্ক্রিন ওভারলে */
         .login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 99999; padding: 20px; }
         .login-card { background: #1e293b; padding: 40px 30px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5); width: 100%; max-width: 450px; text-align: center; border: 1px solid #334155; }
         .madrasa-logo { width: 90px; height: 90px; margin-bottom: 20px; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.4)); object-fit: contain; }
@@ -26,8 +25,8 @@
         .login-btn { width: 100%; padding: 14px; background: #0284c7; border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; margin-top: 10px; }
         .login-btn:hover { background: #0369a1; }
         
-        /* 🎯 গিটহাব মেইন ড্যাশবোর্ড কন্টেইনার (লগইন সফল হওয়ার আগ পর্যন্ত এটি হাইড থাকবে) */
-        .main-container { width: 100%; height: 100%; padding: 20px; display: none; }
+        .main-container { width: 100%; height: 100%; overflow: hidden; display: none; position: relative; }
+        iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; background-color: #0f172a; }
     </style>
 </head>
 <body>
@@ -55,12 +54,11 @@
     </div>
 
     <div class="main-container" id="mainAppContainer"> 
-        <h1 style="color: #38bdf8; text-align: center; margin-top: 50px;">🎉 মাদ্রাসা ম্যানেজমেন্ট সিস্টেম ড্যাশবোর্ডে আপনাকে স্বাগতম!</h1>
-        <p style="text-align: center; color: #94a3b8;">আপনার গিটহাব পেজের মূল অ্যাপ্লিকেশনটি এখন সফলভাবে সক্রিয় রয়েছে।</p>
+        <iframe id="appIframe" src=""></iframe>
     </div>
 
     <script>
-        // 🎯 আপনার দেওয়া সর্বশেষ গুগল অ্যাপস স্ক্রিপ্টের ডিরেক্ট এপিআই ইউআরএল
+        // 🎯 আপনার নতুন গুগল অ্যাপস স্ক্রিপ্টের ডেপ্লয়মেন্ট ইউআরএল (URL)
         var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbw_Ub2HvJIfN9y972NucCzAmwiT2NpypKT6RbCEZvwUsN_W_xqtw2TRZrtYldQxP4cfZw/exec";
 
         window.addEventListener('DOMContentLoaded', function() {
@@ -103,21 +101,18 @@
             btn.innerText = "সার্ভার যাচাই করা হচ্ছে...";
             btn.disabled = true;
 
-            // ব্যাকগ্রাউন্ডে গুগল শিটের ডেটা চেক করার এপিআই লিঙ্ক তৈরি হচ্ছে
             var requestUrl = GOOGLE_SCRIPT_API + "?user=" + encodeURIComponent(userField) + "&key=" + encodeURIComponent(keyField);
 
             fetch(requestUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.success) {
-                        btn.innerText = "🎉 লগইন সফল! ওপেন হচ্ছে...";
+                        btn.innerText = "🎉 লগইন সফল! ড্যাশবোর্ড ওপেন হচ্ছে...";
                         
-                        // 🚀 আইফ্রেমের ঝামেলা ছাড়া সরাসরি গিটহাবের মেইন ড্যাশবোর্ড কন্টেইনার উন্মোচন করার লজিক
+                        // সাকসেস হলে মূল ড্যাশবোর্ড লোড করার প্যারামিটার পাঠানো হচ্ছে
+                        document.getElementById('appIframe').src = GOOGLE_SCRIPT_API + "?loadApp=true"; 
                         document.getElementById('loginOverlay').style.display = 'none';
                         document.getElementById('mainAppContainer').style.display = 'block';
-                        
-                        // ইউজারের রোল ব্রাউজার মেমোরিতে সেভ করে রাখা হলো (যদি পরবর্তীতে ড্যাশবোর্ডে প্রয়োজন হয়)
-                        localStorage.setItem('userRole', data.role);
                     } else {
                         showMsg("❌ " + (data.error ? data.error : "ভুল ইউজার আইডি অথবা পাসওয়ার্ড!"));
                         btn.innerText = "🔑 যাচাই ও সক্রিয় করুন";
@@ -125,7 +120,7 @@
                     }
                 })
                 .catch(err => {
-                    console.log("Error logic triggered...", err);
+                    console.log("Error logic triggered...");
                     showMsg("❌ সার্ভার সংযোগে সমস্যা হয়েছে! আবার চেষ্টা করুন।");
                     btn.innerText = "🔑 যাচাই ও সক্রিয় করুন";
                     btn.disabled = false;
@@ -137,7 +132,6 @@
     </script>
 
     <script>
-        // রাইট ক্লিক এবং ইন্সপেক্ট এলিমেন্ট লক করার সিকিউরিটি স্ক্রিপ্ট
         document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         document.onkeydown = function(e) {
             if (e.keyCode == 123) return false;
