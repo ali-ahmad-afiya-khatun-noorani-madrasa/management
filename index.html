@@ -150,7 +150,7 @@
             box-shadow: none;
         }
 
-        /* বুট-টাইম সাইলেন্ট সেশন-চেক লোডার (নতুন) */
+        /* বুট-টাইম সাইলেন্ট সেশন-চেক লোডার */
         #bootLoader {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -218,7 +218,6 @@
 
     <div class="login-overlay" id="loginOverlay">
         <div class="login-card" id="loginCardContainer">
-            <!-- আপনার দেওয়া লোগো লিংকটি এখানে সঠিকভাবে সেট করা হয়েছে -->
             <img src="https://lh3.googleusercontent.com/d/1B-tFRZng9hiqmoHVOnioQ_EdWt1vJ6h9=w1000" alt="Madrasa Logo" class="madrasa-logo" />
             <h2>লাইসেন্স ভেরিফিকেশন</h2>
             <p>সফটওয়্যারটি ব্যবহার করতে অনুগ্রহ করে ইউজারনেম এবং পাসওয়ার্ড দিন</p>
@@ -247,7 +246,7 @@
 
     <script>
         // গুগল অ্যাপস স্ক্রিপ্টের ডেপ্লয়মেন্ট ইউআরএল (URL)
-        var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbyPil8xKWmhuuHveVeH3UID1V_1QouH4pxbBhUcu2QM4Kah_1ZJen4WpYmDmwM6wim8/exec";
+        var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbzxjY0d5-XrFF0AB0Gr4M-kKC3ZYDGoeQyzOEO7R5qmr0iK9X8kEqRyPXFPUrzz0Zzc/exec";
 
         // লগইন সফল হলে সার্ভার থেকে পাওয়া সেশন-টোকেন এখানে সেভ থাকবে —
         // পরের বার এই পেজে ঢুকলে এই টোকেন দিয়েই চুপচাপ (ফর্ম না দেখিয়ে) লগইন
@@ -281,29 +280,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', function() {
-            var urlParams = new URLSearchParams(window.location.search);
-
-            // সরাসরি ব্লক করা লিংক (?status=denied) হলে সাইলেন্ট-সেশন চেক না করে
-            // সরাসরি এরর মেসেজ দেখানো হবে
-            if (urlParams.get('status') === 'denied') {
-                hideBootLoader();
-                document.getElementById('loginOverlay').classList.add('show');
-                document.getElementById('loginCardContainer').innerHTML = `
-                    <div style="font-size: 65px; margin-bottom: 15px;">🔒</div>
-                    <h2 style="color: #f87171; margin-bottom: 10px;">অ্যাক্সেস অস্বীকৃত!</h2>
-                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #f87171; padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; font-weight: bold; text-align: center;">
-                        🚨 সরাসরি লিংকে প্রবেশ করা সম্পূর্ণ নিষিদ্ধ।
-                    </div>
-                    <p style="color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 25px;">
-                        নিরাপত্তাজনিত কারণে এই ক্লাউড সার্ভার ইউআরএলটি লক করা হয়েছে। সফটওয়্যারটি ব্যবহার করতে অনুগ্রহ করে মূল গিটহাব পোর্টাল ব্যবহার করুন।
-                    </p>
-                    <button class="login-btn" onclick="window.location.href=window.location.pathname" style="background: #0284c7; width: 100%; padding: 14px; border-radius: 8px; color: white; font-weight: bold; border: none; cursor: pointer;">
-                        🔄 মূল লগইন পেজে ফিরুন
-                    </button>
-                `;
-                return;
-            }
-
+            // সরাসরি লিংকে প্রবেশের কোনো বাধা নেই — সবসময় স্বাভাবিক সেশন-চেক ফ্লো চলবে
             var savedToken = getSavedSession();
             if (!savedToken) {
                 // কোনো সেভ করা সেশন নেই — সরাসরি স্বাভাবিক লগইন ফর্ম দেখাও
@@ -395,15 +372,5 @@
         document.getElementById('username').addEventListener('keypress', function(e) { if (e.key === 'Enter') { performSecureLogin(); } });
     </script>
 
-    <!-- সিকিউরিটি স্ক্রিপ্ট (রাইট ক্লিক এবং ইন্সপেক্ট এলিমেন্ট ব্লক) -->
-    <script>       
-        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) return false;
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) return false;
-            if (e.ctrlKey && e.keyCode == 85) return false;
-        };
-    </script>
 </body>
 </html>
