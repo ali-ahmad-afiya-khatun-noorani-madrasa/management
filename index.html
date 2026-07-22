@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="bn"> 
-<head>  
+<head> 
     <meta charset="UTF-8" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
     <title>মাদ্রাসা ম্যানেজমেন্ট সিস্টেম</title>    
-   
+    
     <!-- ফেভিকন আইকন --> 
     <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1B-tFRZng9hiqmoHVOnioQ_EdWt1vJ6h9=w1000" />
     <link href="https://fonts.googleapis.com/css2?family=SolaimanLipi&display=swap" rel="stylesheet" />
     
     <style>
         /* গ্লোবাল স্টাইল এবং ফন্ট ফিক্স */ 
-            * { 
+        * { 
             box-sizing: border-box; 
             font-family: 'SolaimanLipi', sans-serif !important;  
         }
@@ -169,20 +169,22 @@
         #bootLoader span { color: #94a3b8; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* মেইন কনটেইনার ও আইফ্রেম */
+        /* মেইন কনটেইনার ও আইফ্রেম (নিচের কন্টেন্ট ঢেকে যাওয়া সমস্যার সমাধান) */
         .main-container { 
             width: 100%; 
-            height: 100%; 
+            height: 100vh; 
             overflow: hidden; 
             display: none; 
             position: relative; 
+            padding-bottom: env(safe-area-inset-bottom, 60px); /* মোবাইলের নেভিগেশন বারের সেফ মার্জিন */
+            box-sizing: border-box;
         }
         iframe { 
             position: absolute; 
             top: 0; 
             left: 0; 
             width: 100%; 
-            height: 100%; 
+            height: calc(100% - 60px); /* নিচে ৬০ পিক্সেল অতিরিক্ত জায়গা রাখাল যাতে নেভিগেশন বার কোনো মডিউল না ঢাকে */
             border: none; 
             background-color: #0f172a; 
         }
