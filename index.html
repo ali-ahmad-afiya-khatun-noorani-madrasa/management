@@ -2,7 +2,7 @@
 <html lang="bn"> 
 <head> 
     <meta charset="UTF-8" /> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" /> 
     <title>মাদ্রাসা ম্যানেজমেন্ট সিস্টেম</title>    
     
     <!-- ফেভিকন আইকন --> 
@@ -18,10 +18,10 @@
         html, body { 
             margin: 0;     
             padding: 0; 
-            height: 100vh; 
-            width: 100vw; 
+            height: 100%; 
+            width: 100%; 
             overflow: hidden; 
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            background: #0f172a;
             color: #f8fafc; 
         }
         
@@ -37,6 +37,7 @@
             align-items: center; 
             z-index: 99999; 
             padding: 20px; 
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
         }
         .login-overlay.show { display: flex; }
         .login-card { 
@@ -139,9 +140,7 @@
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
         }
-        .login-btn:active {
-            transform: translateY(1px);
-        }
+        .login-btn:active { transform: translateY(1px); }
         .login-btn:disabled {
             background: #334155;
             color: #94a3b8;
@@ -169,55 +168,54 @@
         #bootLoader span { color: #94a3b8; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* মেইন কনটেইনার ও আইফ্রেম (উপর-নিচের নিখুঁত মার্জিন) */
+        /* মেইন কনটেইনার ও আইফ্রেম (নিখুঁত মার্জিন ও প্যাডিং ফিক্স) */
         .main-container { 
-            width: 100vw; 
-            height: 100vh; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             overflow: hidden; 
             display: none; 
-            position: relative; 
+            /* মোবাইল ফোনের ঘড়ি/নচ এবং নিচের নেভিগেশন বারের সেফ জোন প্যাডিং */
+            padding-top: max(35px, env(safe-area-inset-top)); 
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            background-color: #0f172a;
         }
         iframe { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
             width: 100%; 
             height: 100%; 
             border: none; 
+            display: block;
             background-color: #0f172a; 
         }
 
-        /* শুধু আইকন ওয়ালা নতুন স্টাইলিশ লগ-আউট বাটন (উপরে ডান পাশে) */
+        /* মোবাইলের জন্য স্পষ্ট দেখা যাওয়ার মতো রেসপন্সিভ লগ-আউট বাটন */
         #logoutBtn {
             position: fixed;
-            top: 12px; 
-            right: 12px;
-            z-index: 100001;
-            background: rgba(225, 29, 72, 0.85);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            top: max(40px, calc(env(safe-area-inset-top) + 8px)); 
+            right: 15px;
+            z-index: 999999; /* যেন সবার উপরে স্পষ্ট থাকে */
+            background: #ef4444;
             color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid #ffffff;
             border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             display: none;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.6);
             transition: all 0.2s ease;
         }
         #logoutBtn:hover { 
-            background: rgba(225, 29, 72, 1); 
-            transform: scale(1.08);
-            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.5);
+            transform: scale(1.1);
+            background: #dc2626;
         }
-        #logoutBtn:active {
-            transform: scale(0.95);
-        }
+        #logoutBtn:active { transform: scale(0.92); }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-5px); }
@@ -258,14 +256,11 @@
         <iframe id="appIframe" src=""></iframe>
     </div>
 
-    <!-- কেবল মাত্র একটি পাওয়ার আইকন সহ বাটন -->
+    <!-- টপ-রাইট লাল পাওয়ার পাওয়ার বাটন -->
     <button id="logoutBtn" onclick="performLogout()" title="লগ-আউট">⏻</button>
 
     <script>
-        // গুগল অ্যাপস স্ক্রিপ্টের ডেপ্লয়মেন্ট ইউআরএল (URL)
         var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbzZ731W3WfvNgB7vbKg6N1mcA2Wb0hiHbDuu5VyZlPRoa3sugW0t053uBotlgObIzE7/exec";
-
-        // লগইন সফল হলে সার্ভার থেকে পাওয়া সেশন-টোকেন এখানে সেভ থাকবে
         var SESSION_STORAGE_KEY = 'sms_session_token';
 
         function getSavedSession() {
@@ -345,9 +340,7 @@
                 .then(data => {
                     if (data && data.success) {
                         btn.innerText = "🎉 লগইন সফল! ড্যাশবোর্ড ওপেন হচ্ছে...";
-
                         if (data.session) saveSession(data.session);
-
                         openApp();
                     } else {
                         showMsg("❌ " + (data.error ? data.error : "ভুল ইউজার আইডি অথবা পাসওয়ার্ড!"));
@@ -356,7 +349,6 @@
                     }
                 })
                 .catch(err => {
-                    console.log("Error logic triggered...");
                     showMsg("❌ সার্ভার সংযোগে সমস্যা হয়েছে! আবার চেষ্টা করুন।");
                     btn.innerText = "🔑 যাচাই ও সক্রিয় করুন";
                     btn.disabled = false;
@@ -379,6 +371,5 @@
         document.getElementById('licenseKey').addEventListener('keypress', function(e) { if (e.key === 'Enter') { performSecureLogin(); } });
         document.getElementById('username').addEventListener('keypress', function(e) { if (e.key === 'Enter') { performSecureLogin(); } });
     </script>
-
 </body>
 </html>
