@@ -169,7 +169,7 @@
         #bootLoader span { color: #94a3b8; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* মেইন কনটেইনার ও আইফ্রেম (নিখুঁত ফুলস্ক্রিন ভিউ) */
+        /* মেইন কনটেইনার ও আইফ্রেম (উপর-নিচের নিখুঁত মার্জিন) */
         .main-container { 
             width: 100vw; 
             height: 100vh; 
@@ -187,35 +187,36 @@
             background-color: #0f172a; 
         }
 
-        /* আপডেট করা ফ্লোটিং লগ-আউট বাটন (ডানদিকের নিচে ভাসমান পজিশনে) */
+        /* শুধু আইকন ওয়ালা নতুন স্টাইলিশ লগ-আউট বাটন (উপরে ডান পাশে) */
         #logoutBtn {
             position: fixed;
-            bottom: 20px; 
-            right: 20px;
+            top: 12px; 
+            right: 12px;
             z-index: 100001;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
+            background: rgba(225, 29, 72, 0.85);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
             display: none;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
         }
         #logoutBtn:hover { 
-            background: rgba(239, 68, 68, 0.9); 
-            color: #ffffff;
-            border-color: transparent; 
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+            background: rgba(225, 29, 72, 1); 
+            transform: scale(1.08);
+            box-shadow: 0 6px 16px rgba(225, 29, 72, 0.5);
         }
         #logoutBtn:active {
-            transform: translateY(0);
+            transform: scale(0.95);
         }
 
         @keyframes fadeIn {
@@ -257,7 +258,8 @@
         <iframe id="appIframe" src=""></iframe>
     </div>
 
-    <button id="logoutBtn" onclick="performLogout()">🚪 লগ-আউট</button>
+    <!-- কেবল মাত্র একটি পাওয়ার আইকন সহ বাটন -->
+    <button id="logoutBtn" onclick="performLogout()" title="লগ-আউট">⏻</button>
 
     <script>
         // গুগল অ্যাপস স্ক্রিপ্টের ডেপ্লয়মেন্ট ইউআরএল (URL)
@@ -289,7 +291,7 @@
             document.getElementById('loginOverlay').classList.remove('show');
             document.getElementById('appIframe').src = GOOGLE_SCRIPT_API + "?loadApp=true";
             document.getElementById('mainAppContainer').style.display = 'block';
-            document.getElementById('logoutBtn').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'flex';
         }
 
         window.addEventListener('DOMContentLoaded', function() {
