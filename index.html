@@ -169,41 +169,54 @@
         #bootLoader span { color: #94a3b8; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* মেইন কনটেইনার ও আইফ্রেম (নিচের কন্টেন্ট ঢেকে যাওয়া সমস্যার সমাধান) */
+        /* মেইন কনটেইনার ও আইফ্রেম (নিখুঁত ফুলস্ক্রিন ভিউ) */
         .main-container { 
-            width: 100%; 
+            width: 100vw; 
             height: 100vh; 
             overflow: hidden; 
             display: none; 
             position: relative; 
-            padding-bottom: env(safe-area-inset-bottom, 60px); /* মোবাইলের নেভিগেশন বারের সেফ মার্জিন */
-            box-sizing: border-box;
         }
         iframe { 
             position: absolute; 
             top: 0; 
             left: 0; 
             width: 100%; 
-            height: calc(100% - 60px); /* নিচে ৬০ পিক্সেল অতিরিক্ত জায়গা রাখাল যাতে নেভিগেশন বার কোনো মডিউল না ঢাকে */
+            height: 100%; 
             border: none; 
             background-color: #0f172a; 
         }
 
-        /* ছোট লগ-আউট বাটন — মেইন অ্যাপের উপরে ভাসমান */
+        /* আপডেট করা ফ্লোটিং লগ-আউট বাটন (ডানদিকের নিচে ভাসমান পজিশনে) */
         #logoutBtn {
             position: fixed;
-            top: 10px; right: 14px;
+            bottom: 20px; 
+            right: 20px;
             z-index: 100001;
             background: rgba(15, 23, 42, 0.85);
-            color: #f8fafc;
-            border: 1px solid rgba(71, 85, 105, 0.7);
-            border-radius: 8px;
-            padding: 7px 12px;
-            font-size: 12.5px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
             display: none;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
         }
-        #logoutBtn:hover { background: rgba(239, 68, 68, 0.85); border-color: transparent; }
+        #logoutBtn:hover { 
+            background: rgba(239, 68, 68, 0.9); 
+            color: #ffffff;
+            border-color: transparent; 
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+        }
+        #logoutBtn:active {
+            transform: translateY(0);
+        }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-5px); }
@@ -250,9 +263,7 @@
         // গুগল অ্যাপস স্ক্রিপ্টের ডেপ্লয়মেন্ট ইউআরএল (URL)
         var GOOGLE_SCRIPT_API = "https://script.google.com/macros/s/AKfycbzZ731W3WfvNgB7vbKg6N1mcA2Wb0hiHbDuu5VyZlPRoa3sugW0t053uBotlgObIzE7/exec";
 
-        // লগইন সফল হলে সার্ভার থেকে পাওয়া সেশন-টোকেন এখানে সেভ থাকবে —
-        // পরের বার এই পেজে ঢুকলে এই টোকেন দিয়েই চুপচাপ (ফর্ম না দেখিয়ে) লগইন
-        // যাচাই করা হবে, ফলে বারবার ইউজার/পাসওয়ার্ড দিতে হবে না।
+        // লগইন সফল হলে সার্ভার থেকে পাওয়া সেশন-টোকেন এখানে সেভ থাকবে
         var SESSION_STORAGE_KEY = 'sms_session_token';
 
         function getSavedSession() {
@@ -282,15 +293,12 @@
         }
 
         window.addEventListener('DOMContentLoaded', function() {
-            // সরাসরি লিংকে প্রবেশের কোনো বাধা নেই — সবসময় স্বাভাবিক সেশন-চেক ফ্লো চলবে
             var savedToken = getSavedSession();
             if (!savedToken) {
-                // কোনো সেভ করা সেশন নেই — সরাসরি স্বাভাবিক লগইন ফর্ম দেখাও
                 showLoginForm();
                 return;
             }
 
-            // সেভ করা সেশন আছে — চুপচাপ ভেরিফাই করে সরাসরি অ্যাপ খুলে দাও
             fetch(GOOGLE_SCRIPT_API + "?session=" + encodeURIComponent(savedToken))
                 .then(function(r) { return r.json(); })
                 .then(function(data) {
@@ -303,8 +311,6 @@
                     }
                 })
                 .catch(function() {
-                    // নেটওয়ার্ক সমস্যায় টোকেন মুছে ফেলা হচ্ছে না (হয়তো সাময়িক
-                    // সমস্যা), শুধু স্বাভাবিক লগইন ফর্ম দেখানো হচ্ছে
                     showLoginForm();
                 });
         });
@@ -338,8 +344,6 @@
                     if (data && data.success) {
                         btn.innerText = "🎉 লগইন সফল! ড্যাশবোর্ড ওপেন হচ্ছে...";
 
-                        // সফল লগইনের সেশন-টোকেন সেভ রাখা হচ্ছে — পরের বার এই
-                        // পেজে এলে আর ইউজার/পাসওয়ার্ড লাগবে না
                         if (data.session) saveSession(data.session);
 
                         openApp();
@@ -363,7 +367,7 @@
             document.getElementById('logoutBtn').style.display = 'none';
             document.getElementById('mainAppContainer').style.display = 'none';
             document.getElementById('appIframe').src = '';
-            // ইউজারনেম/পাসওয়ার্ড ফিল্ড খালি করে স্বাভাবিক লগইন ফর্ম দেখানো হচ্ছে
+            
             document.getElementById('username').value = '';
             document.getElementById('licenseKey').value = '';
             document.getElementById('errorBlock').style.display = 'none';
