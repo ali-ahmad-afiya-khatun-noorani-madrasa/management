@@ -150,7 +150,7 @@
         #bootLoader span { color: #64748b; font-size: 14px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* মেইন কনটেইনার ও আইফ্রেম (সাদা ব্যানার ফিক্সড) */
+        /* মেইন কনটেইনার ও আইফ্রেম (Safe Area Fixed) */
         .main-container { 
             position: fixed;
             top: 0;
@@ -162,7 +162,10 @@
             overflow: hidden; 
             display: none; 
             background-color: #0f172a;
-            padding: 0; /* ওপরের প্যাডিং সম্পূর্ণ শূন্য করা হয়েছে */
+            
+            /* উপরে ও নিচে স্পেস ফিক্স করা হলো */
+            padding-top: env(safe-area-inset-top, 35px);
+            padding-bottom: env(safe-area-inset-bottom, 20px);
         }
         iframe { 
             width: 100%; 
